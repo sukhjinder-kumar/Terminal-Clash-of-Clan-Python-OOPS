@@ -2,14 +2,10 @@
 
 ## How to Play?
 
----
-
 1. When inside game folder, run ``python Game.py`` to run game
 2. To see replay of your game, do ``cd Replays``, followed by ``python Replay.py ./ReplayFiles/<your particular replay.txt>``
 
 ## Controls
-
----
 
 - `w`, `a`, `s`, `d` keys for controling King/Queen movement
 - `j`, `k`, `l` for spawning barbarians from bottom left, bottom right and upper right
@@ -21,8 +17,6 @@
 - `x` to quit game halfway
 
 ## Game Mechanics
-
----
 
 ### Barbarians
 
@@ -119,8 +113,6 @@ Basic philosophy for having village and canvas different is, that village contai
 
 ### CentralProcessingUnit
 
----
-
 1. **CentralProcessingUnit.UpdatingVillage(ch,Village Information)**
 
     - Village Information: Village,TownHall,Huts_list,Walls_list,Cannon_list,King,Barbarian_list
@@ -155,9 +147,7 @@ Basic philosophy for having village and canvas different is, that village contai
 
         - Note: It might happen that number of troops that can be spawned be infinite, however when what we mean is living troops at a moment. If at instant cumulative health of troops account to zero, gain is declared lost.
 
-### Scope for Improvement
-
----
+## Scope for Improvement
 
 1. Highlighting structure of classes. At many places common structure of troops and building are assumed. And this is a problem. Any new troop must be either derived from the super class or should have essential attributes.  
 
