@@ -5,6 +5,7 @@ from colorama import Fore, Back, Style
 class Village:
 
     VillageColor = Back.LIGHTBLACK_EX + Fore.RED + Style.NORMAL
+    Space = VillageColor + " " + Style.RESET_ALL
 
     def __init__(self,Name,Canvas,StartingIndexOnCanvas=None,Row=None,Column=None,SpawningPoints=None):
         # StartintindexOnCanvas is w.r.t to canvas
@@ -17,6 +18,22 @@ class Village:
         self.space = Village.VillageColor + " " + Style.RESET_ALL
         self.VillageLayout2DArray = np.full((self.VillageRows,self.VillageColumns), self.space)
         self.SpawningPoints = SpawningPoints or np.array([[self.VillageRows-1,0],[self.VillageRows-1,self.VillageColumns-1],[0,self.VillageColumns-1]]) 
+
+        # These attribute would help making code robust, 
+        # however for time being they haven't been taken use of
+        # Because all function would need to be written in this convention to take use of it
+        # But newer function can use it
+        # Additional function within village like appending to list can be made that would also check
+        # Currently it is just used for Levels and CPU API
+        self.TownHall_list = []
+        self.Cannon_list = []
+        self.WizardTower_list = []
+        self.Walls_list = []
+        self.Huts_list = []
+        self.Hero_list = []
+        self.Barbarian_list = []
+        self.Archer_list = []
+        self.Balloon_list = []
 
     def AddBuildingOrWeaponToVillage(self, Building):
         # Every Building should have Starting index, 2D array of colors.

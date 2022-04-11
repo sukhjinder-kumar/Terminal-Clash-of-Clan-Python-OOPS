@@ -38,6 +38,11 @@ class Building(Infrastructure):
 class TownHall(Building):
 
     NumberOfTownHall = 0
+    IsTownHall = True
+    IsCannon = False
+    IsHut = False
+    IsWall = False
+    IsWizardTower = False
     ColorForCriticalStage1 = Back.GREEN + Fore.RED + Style.DIM
     ColorForCriticalStage2 = Back.GREEN + Fore.RED + Style.NORMAL
     ColorForCriticalStage3 = Back.GREEN + Fore.RED + Style.BRIGHT
@@ -67,6 +72,11 @@ class TownHall(Building):
 
 class Huts(Building):
 
+    IsTownHall = False
+    IsCannon = False
+    IsHut = True
+    IsWall = False
+    IsWizardTower = False
     NumberOfHuts = 0
     ColorForCriticalStage1 = Back.CYAN + Fore.MAGENTA + Style.DIM
     ColorForCriticalStage2 = Back.CYAN + Fore.MAGENTA + Style.NORMAL
@@ -96,6 +106,11 @@ class Huts(Building):
 
 class Walls(Building):
 
+    IsTownHall = False
+    IsCannon = False
+    IsHut = False 
+    IsWall = True
+    IsWizardTower = False
     NumberOfWalls = 0
     ColorForCriticalStage1 = Back.RED + Fore.YELLOW + Style.DIM
     ColorForCriticalStage2 = Back.RED + Fore.YELLOW + Style.NORMAL
@@ -138,6 +153,11 @@ class Weapons(Infrastructure):
 
 class Cannon(Weapons):
 
+    IsTownHall = False
+    IsCannon = True 
+    IsHut = False 
+    IsWall = False 
+    IsWizardTower = False
     NumberOfCannon = 0
     ColorForCriticalStage1 = Back.BLUE + Fore.YELLOW + Style.DIM
     ColorForCriticalStage2 = Back.BLUE + Fore.YELLOW + Style.NORMAL
@@ -185,3 +205,62 @@ class Cannon(Weapons):
     @classmethod
     def AddOneCannon(cls):
         Cannon.NumberOfCannon += 1    
+
+
+class WizardTower(Weapons):
+
+    IsTownHall = False
+    IsCannon = False 
+    IsHut = False 
+    IsWall = False 
+    IsWizardTower = True
+    NumberOfWizardTower= 0
+    ColorForCriticalStage1 = Back.BLUE + Fore.YELLOW + Style.DIM
+    ColorForCriticalStage2 = Back.BLUE + Fore.YELLOW + Style.NORMAL
+    ColorForCriticalStage3 = Back.BLUE + Fore.YELLOW + Style.BRIGHT
+    ColorWhileAttacking = Back.CYAN + Fore.WHITE + Style.NORMAL
+    HitPoint = 200
+    Size = [3,3]
+    AOERange = 3
+    Damage = Cannon.Damage
+    Range = Cannon.Range 
+
+    def __init__(self,StartingIndexOnVillage,Damage=None,Range=None,HitPoint=None,SizeOfInfrastructure=None,ColorForCriticalStage1=None,ColorForCriticalStage2=None,ColorForCriticalStage3=None):
+        Color_For_Critical_Stage1 = ColorForCriticalStage1 or WizardTower.ColorForCriticalStage1
+        Color_For_Critical_Stage2 = ColorForCriticalStage2 or WizardTower.ColorForCriticalStage2
+        Color_For_Critical_Stage3 = ColorForCriticalStage3 or WizardTower.ColorForCriticalStage3
+        self.ColorWhileAttacking = WizardTower.ColorWhileAttacking
+        Hit_Point = HitPoint or WizardTower.HitPoint 
+        Size_ = SizeOfInfrastructure or WizardTower.Size 
+        Damage_ = Damage or WizardTower.Damage
+        Range_ = Range or WizardTower.Range
+    
+        Center = [StartingIndexOnVillage[0]+int(Size_[0]/2),StartingIndexOnVillage[1]+int(Size_[1]/2)]
+        
+        self.AOERange = WizardTower.AOERange
+        self.Symbol = Color_For_Critical_Stage1 + "W" + Style.RESET_ALL
+        WizardTower2DArray_ = np.full((Size_[0],Size_[1]), self.Symbol)
+
+        super().__init__(Hit_Point,Damage_,Range_,Center,StartingIndexOnVillage,WizardTower2DArray_,Size_,Color_For_Critical_Stage1,Color_For_Critical_Stage2,Color_For_Critical_Stage3)
+
+        WizardTower.AddOneWizardTower()
+
+    def SetColorBasedOnHealthLeft(self,Village,IsAttacking):
+        if(IsAttacking):
+            self.Symbol = self.ColorWhileAttacking + "W" + Style.RESET_ALL
+            self.Array2D = np.full((self.SizeOfInfrastructure[0],self.SizeOfInfrastructure[1]), self.Symbol)
+        else:
+            if(self.HealthLeft<=self.HitPoint and self.HealthLeft>=int(self.HitPoint/2)):
+                self.Symbol = self.ColorForCriticalStage1 + "W" + Style.RESET_ALL
+                self.Array2D = np.full((self.SizeOfInfrastructure[0],self.SizeOfInfrastructure[1]), self.Symbol)
+            if(self.HealthLeft<=int(self.HitPoint/2) and self.HealthLeft>=int(self.HitPoint/5)):
+                self.Symbol = self.ColorForCriticalStage2 + "W" + Style.RESET_ALL
+                self.Array2D = np.full((self.SizeOfInfrastructure[0],self.SizeOfInfrastructure[1]), self.Symbol)
+            if(self.HealthLeft<=int(self.HitPoint/5) and self.HealthLeft>=0):
+                self.Symbol = self.ColorForCriticalStage3 + "W" + Style.RESET_ALL
+                self.Array2D = np.full((self.SizeOfInfrastructure[0],self.SizeOfInfrastructure[1]), self.Symbol)
+        self.UpdateOnVillage(Village)
+
+    @classmethod
+    def AddOneWizardTower(cls):
+        WizardTower.NumberOfWizardTower += 1    

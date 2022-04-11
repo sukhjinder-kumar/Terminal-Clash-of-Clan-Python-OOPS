@@ -11,8 +11,21 @@ class StartingEnding:
     @staticmethod
     def Start():
         StartingEnding.PrintClashOfClans() # We can use this preSleep period for things like loading screen etc, also this coc title can go inside game window
+
+        # Ask Village_name, whether king or Queen, Level
+        VillageName = input("Enter Village Name: ")
+        IsKing = int(input("King(1) or Queen(0): "))
+        while(not IsKing in [0,1]):
+            print("Enter 0 | 1 only!")
+            IsKing = int(input("King(1) or Queen(0): "))
+        Level = int(input("Enter Level 1 | 2 | 3 : "))
+        while(not Level in [1,2,3]):
+            print("Enter Level amongst 1, 2, 3!")
+            Level = int(input("Enter Level 1 | 2 | 3 : "))
+
         sleep(1) # to add delay to verify 
         Engine.Canvas.clear()
+        return [VillageName,IsKing,Level]
 
     @staticmethod
     def Ending(Win):

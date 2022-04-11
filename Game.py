@@ -9,56 +9,26 @@ from StartingEnding import StartingEnding
 from Village import Village
 import Infrastructure
 import Army
+from Level import LevelLayout
 from datetime import datetime
 
 
 # -----------------------------Starting--------------------------------------------------
 init()
+[VillageName,IsKing, Level] = StartingEnding.Start()
 today = datetime.today()
-name = f"{today.year}-{today.month}-{today.day}-{today.hour}-{today.minute}-{today.second}"
+name = f"{VillageName}: {today.year}-{today.month}-{today.day}-{today.hour}-{today.minute}-{today.second}"
 path = f"./Replays/ReplayFiles/{name}"
 InputStorage = open(path,'wt')
-StartingEnding.Start()
+InputStorage.write(str(IsKing))
+InputStorage.write(str(Level))
 
 
 # -----------------------------Variable Initialization----------------------------------
 Window = Engine.Canvas()
-Village = Village("Sukhu",Window) 
+Village = Village(VillageName,Window) 
+LevelLayout(Village,Level,IsKing)
 
-TownHall = Infrastructure.TownHall([9,40])
-TownHall.UpdateOnVillage(Village)
-
-Huts_list = []
-Huts_list.append(Infrastructure.Huts([7,37]))
-Huts_list.append(Infrastructure.Huts([7,48]))
-Huts_list.append(Infrastructure.Huts([12,37]))
-Huts_list.append(Infrastructure.Huts([12,48]))
-Huts_list.append(Infrastructure.Huts([5,5]))
-for hut in Huts_list:
-    hut.UpdateOnVillage(Village)
-
-Walls_list = []
-for row in range(5,16):
-    for column in range(33,55):
-        if(row == 5 or row == 15 or column == 33 or column == 54):
-            Walls_list.append(Infrastructure.Walls([row,column]))
-for wall in Walls_list:
-    wall.UpdateOnVillage(Village)
-
-Cannon_list = []
-Cannon_list.append(Infrastructure.Cannon([9,37]))
-Cannon_list.append(Infrastructure.Cannon([9,48]))
-for cannon in Cannon_list:
-    cannon.UpdateOnVillage(Village)
-
-King = Army.King()
-King.UpdateOnVillage(Village)
-Window.UpdateCanvas(King.KingHealthBar(Village),[Village.StartingIndexOnCanvas[0]+Village.VillageRows,Village.StartingIndexOnCanvas[1]])
-
-Barbarian_list = []
-
-if(not Village.UpdateCanvas()):
-    sys.exit("Boundary Condition exceeded")
 IsEnd = False
 Win = False
 
@@ -72,8 +42,10 @@ while(not IsEnd):
     ch = input.input_to(input.Get())
     if(not(ch is None)):
         InputStorage.write(ch)
-    [IsEnd,Win] = CentralProcessingUnit.UpdatingVillage(ch,Village,TownHall,Huts_list,Walls_list,Cannon_list,King,Barbarian_list)
-    Window.UpdateCanvas(King.KingHealthBar(Village),[Village.StartingIndexOnCanvas[0]+Village.VillageRows,Village.StartingIndexOnCanvas[1]])
+    if(ch is None):
+        InputStorage.write("Q")
+    [IsEnd,Win] = CentralProcessingUnit.UpdatingVillage(ch,Village,Village.TownHall_list[0],Village.Huts_list,Village.Walls_list,Village.Cannon_list,Village.WizardTower_list,Village.Hero_list[0],Village.Barbarian_list,Village.Archer_list,Village.Balloon_list,IsKing)
+    Window.UpdateCanvas(Village.Hero_list[0].HealthBar(Village),[Village.StartingIndexOnCanvas[0]+Village.VillageRows,Village.StartingIndexOnCanvas[1]])
     Window.RenderCanvas()
 
 
