@@ -31,8 +31,6 @@
 
 ## Documentation
 
----
-
 ### Canvas
 
 1. **Canvas(CanvasOrigin=None, CanvasRow=None, CanvasColumn=None, Canvas2DArray=None)**
