@@ -1,4 +1,4 @@
-# Sukhjinder Kumar (2020101055)
+# Sukhjinder Kumar
 
 ## How to Play?
 
